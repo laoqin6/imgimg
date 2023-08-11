@@ -1,0 +1,101 @@
+<head>
+    <meta charset="utf-8">
+    <title>老秦免费在线无损图床-永久储蓄 </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./mdui/css/mdui.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+
+    <link rel="stylesheet" href="./css/index.css">
+    
+    <link rel="icon" href="https://q1.qlogo.cn/g?b=qq&nk=1071082030&s=640">
+</head>
+
+<body>
+    <div id="container">
+        <section id="main_content">
+            <!--<div id="rin-headimg"></div> -->
+            <div class="rin-name">老秦图床-永久储蓄 </div>
+            <div class="rin-description">
+                <h2>
+                </h2>
+            </div>
+            <div class="rin-tr"></div>
+            <div id="links">
+                <a class="mdui-btn mdui-btn-raised rin-btn mdui-text-capitalize"
+                    style="font-size: 30px;display: inline; cursor: pointer" onclick="myimg.click()"> ↑↑ </a>
+            </div>
+            <br>
+
+            <center>
+                <font size="4" color="#7FFFD4" face="Helvetica">
+                    <h3>选择图片后稍等几秒，上传成功会显示.</h3><textarea name="" id="neirong" cols="42" rows="7"></textarea>
+                </font>
+            </center>
+            </main>
+            <input style="visibility: hidden;" class="btn btn-primary" type="file" id="myimg" onchange="imgChange(this)"
+                accept="image/png,image/gif,image/jpeg">
+
+            <div class="panel panel-primary">
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </section>
+        <footer id="rin-footer">
+            <div>2023 老秦官网 wcnb.love
+            </div>
+        </footer>
+        <script src="https://lib.baomitu.com/jquery/2.0.0/jquery.min.js"></script>
+        <script>
+            function imgChange(img) {
+                const reader = new FileReader();
+                reader.onload = function (ev) {
+                    var imgFile = ev.target.result; 
+                    console.log(imgFile);
+
+                    base64url = imgFile.replace(/(.*)?,/, ''); 
+                    form = imgFile.substring(imgFile.indexOf("/") + 1, imgFile.indexOf(";")); 
+                    console.log(imgFile);
+                    uploadimg(base64url, form); //上传
+                }
+                reader.readAsDataURL(img.files[0]);
+            }
+
+            // ----------------------------
+
+            function uploadimg(file, form) {
+                // alert(4)
+                let timestamp = new Date().getTime(); 
+                // https://api.github.com/repos/{owner}/{repo}/contents/{path}
+                let newname = "http://tc.wcnb.love/img/" + timestamp + "." + form; 
+                console.log(newname);
+                $.ajax({
+                    url: "https://api.github.com/repos/laoqin6/imgimg/contents/img/" + timestamp + "." + form,
+                    method: "PUT",
+                    headers: {
+                        "Authorization": "Bearer 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",
+                        "Content-Type": "text/plain"
+                    },
+                    data: "{\r\n  \"message\": \"upload\",\r\n  \"content\": \"" + file + "\"\r\n}",
+                    success: function () {
+                        console.log(111);
+                        $("#neirong").html("你的图片直链:" + newname) 
+                    }
+                })
+            }
+            
+            document.onkeydown = function () {
+            
+                if (event.ctrlKey && window.event.keyCode == 85) {
+                    return false;
+                }
+                
+                if (window.event && window.event.keyCode == 123) {
+                    event.keyCode = 0;
+                    event.returnValue = false;
+                }
+            }
+        </script>
+</body>
+
+</html>
